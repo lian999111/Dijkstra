@@ -41,7 +41,7 @@ public:
 	// Constructor with a vector of vertices
 	PriorityQueue(const std::vector<T>& vertices);
 
-	//~PriorityQueue();
+	~PriorityQueue() {}
 };
 
 template <class T>
