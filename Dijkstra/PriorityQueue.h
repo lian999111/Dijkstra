@@ -4,7 +4,7 @@
 #include <limits>
 #include "Graph.h"
 
-// Priority Queue with custom type of node names
+// Priority Queue with custom type T of node names
 template <class T>
 class PriorityQueue
 {
@@ -36,9 +36,13 @@ private:
 public:
 	// Default constructor
 	PriorityQueue();
-	// Constructor with a graph object with node names of type T
+	// Constructs with a graph object with node names of type T
+	// Inputs:
+	//	g:				A graph object with node names of type T
 	PriorityQueue(const Graph<T>& g);
-	// Constructor with a vector of vertices
+	// Constructs with a vector of vertices
+	// Inputs:
+	//	vertices:		A vector of node names of type T
 	PriorityQueue(const std::vector<T>& vertices);
 
 	~PriorityQueue() {}
