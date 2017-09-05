@@ -81,23 +81,25 @@ bool PriorityQueue<T>::TryChangeGValue(T node, int gValue)
 {
 	// Use find_if() to find the pair whose node name is as given
 	auto ite = std::find_if(pri_queue_.begin(), pri_queue_.end(),
-		[this, &node](const std::pair<T, int>& element) { return element.first == node; });	// Delegation
+		[&node](const std::pair<T, int>& element) { return element.first == node; });	// Delegation
 
 	// The given vertex name must exist
 	assert(ite != pri_queue_.end());
 
 	// If the current g-value is smaller than the given one, do nothing
 	if (ite->second <= gValue)
-		return;
+		return false;
 
 	ite->second = gValue;
 
-	// Use sort() to find the pair whose node name is as given
+	// Sort the priority queue by the g-value (the second of the node pair)
 	std::sort(pri_queue_.begin(), pri_queue_.end(), 
-		[this, &node](const std::pair<T, int>& elem1, const std::pair<T, int>& elem2)	// Delegation
+		[](const auto& elem1, const auto& elem2)	// Delegation
 	{ 
 		return elem1.second < elem2.second;
 	});
+
+	return true;
 }
 
 
