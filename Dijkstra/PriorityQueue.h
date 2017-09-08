@@ -67,8 +67,8 @@ public:
 
 	// Pops and returns the first priority node in the queue
 	// Output:
-	//	The node name of type T of the node with the smallest g-value in the queue
-	T PopPriorityNode();
+	//	The tuple: (self name, parent name, g-value)
+	std::tuple<T, T, int> PopPriorityNode();
 
 	// Insert the given node with its given gValue, if the node is not yet contained
 	// Inputs:
@@ -128,7 +128,7 @@ bool PriorityQueue<T>::TryUpdateNode(const T& node, const T& parent, int gValue)
 }
 
 template<class T>
-T PriorityQueue<T>::PopPriorityNode()
+std::tuple<T, T, int> PriorityQueue<T>::PopPriorityNode()
 {
 	// Reverse the vector so we can put the needed node in the queue at the back then pop it
 	// The reason to sort the node from small to big is just to make it more reasonable
