@@ -80,7 +80,7 @@ public:
 	bool TryInsert(const T& node, const T& parent, int gValue);
 
 	// Returns the size of the priority queue
-	unsigned int Size() const;
+	unsigned int Size();
 
 };
 
@@ -172,7 +172,7 @@ bool PriorityQueue<T>::TryInsert(const T& node, const T& parent, int gValue)
 }
 
 template<class T>
-inline unsigned int PriorityQueue<T>::Size() const
+inline unsigned int PriorityQueue<T>::Size()
 {
 	return pri_queue_.size();
 }
