@@ -142,7 +142,7 @@ std::tuple<T, T, int> PriorityQueue<T>::PopPriorityNode()
 	std::reverse(pri_queue_.begin(), pri_queue_.end());
 
 	//  Return the first element in the pair which is the node name
-	return std::get<0>(pri_node);
+	return pri_node;
 }
 
 template<class T>
