@@ -15,7 +15,7 @@ class PriorityQueue
 private:
 	// The priority queue. Every node is stored as a pair with its name as the first
 	// element and its g-value as the second.
-	std::vector<std::pair<T, int>> pri_queue_;
+	std::vector<std::pair<T, int>> pri_queue_;	// TODO: try to use priority_queue<>
 
 	static std::vector<std::pair<T, int>> MakePriQueueFromVertices(const std::vector<T>& vertices)
 	{
