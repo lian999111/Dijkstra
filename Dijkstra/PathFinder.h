@@ -10,20 +10,31 @@ template <class T>
 class PathFinder
 {
 private:
+	// The graph of interest
+	Graph<T> graph_;
+
+	// The vertices in the graph
+	std::vector<T> vertices_;
+
 	// The start vertex that this shortest path object is based on
 	T start_vertex_;
 
-	Graph<T> graph_;
-
-	std::vector<T> vertices_;
-
-	// The map storing the finished node:
+	// The map storing the closed node:
 	// Key:		node name
 	// Value:	a pair containing the parent node and the g-value
 	std::map<T, std::pair<T, int>> closed_;
 
+	// The priority queue
+	// Make it a data member to keep the priority queue,
+	// so we can continue searching after dropping it halfway if needed.
 	PriorityQueue<T> pq_;
 
+	// Uses Dijkstra's algorithm to find the shortest path from the start vertex
+	// to the target vertex
+	// Inputs:
+	//	target_vertex:		The target vertex to search
+	// Output:
+	//	Ture if path can be found
 	bool Dijkstra(T target_vertex);
 public:
 	// Default constructor.
@@ -33,7 +44,7 @@ public:
 	// TODO: Return reconstructed path
 	void FindPath(T target_vertex)
 	{
-		// Find the target vertex in the graph to check their existence
+		// Find the target vertex in the graph to check its existence
 		const auto ite_target = find(vertices_.begin(), vertices_.end(), target_vertex);
 
 		// The target must exist
@@ -41,8 +52,11 @@ public:
 
 		// If the target vertex is not closed, do Dijkstra's algorthim towards the target
 		const auto ite_target_in_closed = closed_.find(target_vertex);
-		if(ite_target_in_closed == closed_.end())
-			bool found = Dijkstra(target_vertex);
+		if (ite_target_in_closed == closed_.end())
+			if (!Dijkstra(target_vertex))
+			{
+				// TODO: reconstruct the path
+			}
 	}
 };
 
@@ -50,35 +64,47 @@ public:
 template<class T>
 bool PathFinder<T>::Dijkstra(T target_vertex)
 {
+	// Used to store the newly calculated cost (g-value)
 	int cost{ 0 };
-
+	// The current vertex name and the parent's name
 	T curr_name, curr_parent_name;
+	// The g-value of the current vertex
 	int curr_g_value{ 0 };
 
-	//
+	// Keep doing until the priority queue is empty
 	while (pq_.Size())
 	{
+		// Pop the next node from the priority queue and get the names and the g-value
 		auto curr_node = pq_.PopPriorityNode();
 		curr_name = std::get<0>(curr_node);
 		curr_parent_name = std::get<1>(curr_node);
 		curr_g_value = std::get<2>(curr_node);
 
+		// Put the vertex into closed_
 		closed_[curr_name] = std::make_pair(curr_parent_name, curr_g_value);
 
+		// Todo: Separate getting and removing the first node in pq_
+		// If the current node is the desired one, return true and exit
 		if (curr_name == target_vertex)
 			return true;
 
+		// If not found yet, get the neighbors of the current node
 		std::vector<T> neighbors = graph_.NeighborsOf(curr_name);
 		
+		// Expand the neighbors
 		for (auto&& next_name : neighbors)
 		{
+			// Check if this neighbor is already closed
 			const auto ite = closed_.find(next_name);
 			if (ite != closed_.end())
 				continue;
 
+			// If not closed, calculate the its cost from the current node
 			cost = curr_g_value + graph_.GetEdgeValue(curr_name, next_name);
 
+			// Try to insert the node into the priority queue
 			if(!pq_.TryInsert(next_name, curr_name, cost))
+				// If the node in already in the priority queue, try to update it
 				pq_.TryUpdateNode(next_name, curr_name, cost);
 		}
 	}
@@ -87,9 +113,9 @@ bool PathFinder<T>::Dijkstra(T target_vertex)
 
 template<class T>
 PathFinder<T>::PathFinder(const Graph<T>& g, T start_vertex)
-	: start_vertex_(start_vertex)
-	, graph_(g)
+	: graph_(g)
 	, vertices_(g.GetVertices())
+	, start_vertex_(start_vertex)
 	, pq_()
 	, closed_(std::map<T, std::pair<T, int>>())
 {
