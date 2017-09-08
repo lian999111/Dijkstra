@@ -38,16 +38,20 @@ private:
 		return MakePriQueueFromVertices(vertices);
 	}
 public:
-	// Default constructor
+	// Default constructor.
+	// Constructs an empty priority queue (SHOULD BE USED MOST FREQUENTLY).
 	PriorityQueue();
+
 	// Constructs with a graph object with vertex names of type T
 	// Inputs:
 	//	g:				A graph object with vertex names of type T
 	PriorityQueue(const Graph<T>& g);
+
 	// Constructs with a vector of vertices
 	// Inputs:
 	//	vertices:		A vector of vertex names of type T
 	PriorityQueue(const std::vector<T>& vertices);
+
 	// Change the g-value of the given node name and sort the order accordingly, if
 	// the existing g-value is greater than the given one
 	// Inputs:
@@ -57,6 +61,10 @@ public:
 	//	Ture if g-value is changed successfully
 	bool TryChangeGValue(T node, int gValue);
 
+	// Pops and returns the first priority node in the queue
+	// Output:
+	//	The node name of type T of the node with the smallest g-value in the queue
+	T PopPriorityNode();
 
 	~PriorityQueue() {}
 };
@@ -100,6 +108,24 @@ bool PriorityQueue<T>::TryChangeGValue(T node, int gValue)
 	});
 
 	return true;
+}
+
+template<class T>
+T PriorityQueue<T>::PopPriorityNode()
+{
+	// Reverse the vector so we can put the needed node in the queue at the back then pop it
+	// The reason to sort the node from small to big is just to make it more reasonable
+	std::reverse(pri_queue_.begin(), pri_queue_.end());
+
+	// Get the node and pop it from the vector
+	std::pair<T, int> pri_node = pri_queue_.back();
+	pri_queue_.pop_back();
+
+	// Reverse the vector again
+	std::reverse(pri_queue_.begin(), pri_queue_.end());
+
+	//  Return the first element in the pair which is the node name
+	return pri_node.first;
 }
 
 

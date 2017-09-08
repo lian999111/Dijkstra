@@ -5,7 +5,7 @@
 
 int main()
 {
-	std::vector<std::string> vertices{ "A", "B", "C", "D", "E" };
+	std::vector<std::string> vertices{ "B", "A", "C", "D", "E" };
 	Graph<std::string> g(vertices, 0.7, 10);
 
 	PriorityQueue<std::string> pq1(vertices);
@@ -16,6 +16,9 @@ int main()
 	pq1.TryChangeGValue("D", 10);
 	pq1.TryChangeGValue("D", 5);
 	pq1.TryChangeGValue("D", 10);
+
+	auto name = pq1.PopPriorityNode();
+	
 
 	return 0;
 }
