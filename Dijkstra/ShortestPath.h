@@ -12,7 +12,16 @@ private:
 	// (self, parent, g-value)
 	std::vector<std::tuple<T, T, int>> closed;
 public:
+	// Default constructor.
+	// Initializes closed as empty
 	ShortestPath();
 
-	static std::vector<T> Dijkstra(Graph g);
+	std::vector<T> Dijkstra(Graph g);
+
+
 };
+
+template<class T>
+ShortestPath<T>::ShortestPath()
+	: closed(std::vector<std::tuple<T, T, int>>())
+{}
