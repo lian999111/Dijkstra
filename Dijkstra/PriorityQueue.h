@@ -77,6 +77,9 @@ public:
 	//	Ture if insertion is successful
 	bool TryInsert(const T& node, int gValue);
 
+	// Returns the size of the priority queue
+	unsigned int Size();
+
 };
 
 template <class T>
@@ -162,6 +165,12 @@ bool PriorityQueue<T>::TryInsert(const T& node, int gValue)
 	});
 
 	return true;
+}
+
+template<class T>
+inline unsigned int PriorityQueue<T>::Size()
+{
+	return pri_queue_.size();
 }
 
 

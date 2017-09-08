@@ -24,6 +24,7 @@ int main()
 
 	auto name = pq1.PopPriorityNode();
 	
+	auto size = pq1.Size();
 
 	return 0;
 }
