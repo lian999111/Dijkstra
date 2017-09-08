@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
-#include <utility>
-#include <limits>
+#include <tuple>
 #include <algorithm>
 #include "Graph.h"
 
@@ -13,25 +12,26 @@ template <class T>
 class PriorityQueue
 {
 private:
-	// The priority queue. Every node is stored as a pair with its name as the first
-	// element and its g-value as the second.
-	std::vector<std::pair<T, int>> pri_queue_;	// TODO: try to use priority_queue<>
+	// The priority queue. Every node is stored as a tuple in the following form:
+	// (self name, parent name, g-value)
+	std::vector<std::tuple<T, T, int>> pri_queue_;	// TODO: try to use priority_queue<>
 
-	static std::vector<std::pair<T, int>> MakePriQueueFromVertices(const std::vector<T>& vertices)
+	static std::vector<std::tuple<T, T, int>> MakePriQueueFromVertices(const std::vector<T>& vertices)
 	{
 		int queue_size = vertices.size();
-		std::vector<std::pair<T, int>> temp_queue;
+		std::vector<std::tuple<T, T, int>> temp_queue;
 		temp_queue.reserve(queue_size);
 
 		for (const auto& vertex : vertices)
 		{
+			// Set the initial parent to self
 			// Set the initial g-value to the max of int
-			temp_queue.push_back(std::make_pair(vertex, std::numeric_limits<int>::max()));
+			temp_queue.push_back(std::make_tuple(vertex, vertex, std::numeric_limits<int>::max()));
 		}
 		return temp_queue;
 	}
 
-	static std::vector<std::pair<T, int>> MakePriQueueFromGraph(const Graph<T>& g)
+	static std::vector<std::tuple<T, T, int>> MakePriQueueFromGraph(const Graph<T>& g)
 	{
 		auto vertices = g.GetVertices();
 
@@ -59,10 +59,11 @@ public:
 	// the existing g-value is greater than the given one
 	// Inputs:
 	//	node:			A node name
+	//	parent:			The name of the parent node
 	//	gValue:			The corresponding g-value to be updated
 	// Output:
 	//	Ture if g-value is changed successfully
-	bool TryChangeGValue(const T& node, int gValue);
+	bool TryUpdateNode(const T& node, const T& parent, int gValue);
 
 	// Pops and returns the first priority node in the queue
 	// Output:
@@ -72,10 +73,11 @@ public:
 	// Insert the given node with its given gValue, if the node is not yet contained
 	// Inputs:
 	//	node:			A node name
+	//	parent:			The name of the parent node
 	//	gValue:			The corresponding g-value to be updated
 	// Output:
 	//	Ture if insertion is successful
-	bool TryInsert(const T& node, int gValue);
+	bool TryInsert(const T& node, const T& parent, int gValue);
 
 	// Returns the size of the priority queue
 	unsigned int Size();
@@ -84,7 +86,7 @@ public:
 
 template <class T>
 PriorityQueue<T>::PriorityQueue()
-	: pri_queue_(std::vector<std::pair<T, int>>())
+	: pri_queue_(std::vector<std::tuple<T, T, int>>())
 {}
 
 template <class T>
@@ -98,26 +100,28 @@ PriorityQueue<T>::PriorityQueue(const std::vector<T>& vertices)
 {}
 
 template<class T>
-bool PriorityQueue<T>::TryChangeGValue(const T& node, int gValue)
+bool PriorityQueue<T>::TryUpdateNode(const T& node, const T& parent, int gValue)
 {
 	// Use find_if() to find the pair whose node name is as given
 	auto ite = std::find_if(pri_queue_.begin(), pri_queue_.end(),
-		[&node](const std::pair<T, int>& element) { return element.first == node; });	// Delegation
+		[&node](const std::tuple<T, T, int>& element) { return std::get<0>(element) == node; });	// Delegation
 
 	// The given vertex name must exist
 	assert(ite != pri_queue_.end());
 
 	// If the current g-value is smaller than the given one, do nothing
-	if (ite->second <= gValue)
+	if (std::get<2>(*ite) <= gValue)
 		return false;
 
-	ite->second = gValue;
+	// Change the parent node and the g-value
+	std::get<1>(*ite) = parent;
+	std::get<2>(*ite) = gValue;
 
 	// Sort the priority queue by the g-value (the second of the node pair)
 	std::sort(pri_queue_.begin(), pri_queue_.end(), 
 		[](const auto& elem1, const auto& elem2)	// Delegation
 	{ 
-		return elem1.second < elem2.second;
+		return std::get<2>(elem1) < std::get<2>(elem2);
 	});
 
 	return true;
@@ -131,37 +135,37 @@ T PriorityQueue<T>::PopPriorityNode()
 	std::reverse(pri_queue_.begin(), pri_queue_.end());
 
 	// Get the node and pop it from the vector
-	std::pair<T, int> pri_node = pri_queue_.back();
+	std::tuple<T, T, int> pri_node = pri_queue_.back();
 	pri_queue_.pop_back();
 
 	// Reverse the vector again
 	std::reverse(pri_queue_.begin(), pri_queue_.end());
 
 	//  Return the first element in the pair which is the node name
-	return pri_node.first;
+	return std::get<0>(pri_node);
 }
 
 template<class T>
-bool PriorityQueue<T>::TryInsert(const T& node, int gValue)
+bool PriorityQueue<T>::TryInsert(const T& node, const T& parent, int gValue)
 {
 	// Use find_if() to find the pair whose node name is as given
 	// TODO: This will cause superfluous find_if() if this method is used after TryChangeGValue()
 	const auto ite = std::find_if(pri_queue_.begin(), pri_queue_.end(),
-		[&node](const std::pair<T, int>& element) { return element.first == node; });	// Delegation
+		[&node](const std::tuple<T, T, int>& element) { return std::get<0>(element) == node; });	// Delegation
 																				
 	if (ite != pri_queue_.end())
 	{
 		return false;
 	}
 
-	auto new_node = std::make_pair(node, gValue);
+	auto new_node = std::make_tuple(node, parent, gValue);
 	pri_queue_.push_back(new_node);
 
 	// Sort the priority queue by the g-value (the second of the node pair)
 	std::sort(pri_queue_.begin(), pri_queue_.end(),
 		[](const auto& elem1, const auto& elem2)	// Delegation
 	{
-		return elem1.second < elem2.second;
+		return std::get<2>(elem1) < std::get<2>(elem2);
 	});
 
 	return true;

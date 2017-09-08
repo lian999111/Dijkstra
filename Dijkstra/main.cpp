@@ -12,15 +12,15 @@ int main()
 	PriorityQueue<std::string> pq2(g);
 	PriorityQueue<std::string> pq3;
 
-	pq1.TryChangeGValue("A", 5);
-	pq1.TryChangeGValue("D", 10);
-	pq1.TryChangeGValue("D", 5);
-	pq1.TryChangeGValue("D", 10);
+	pq1.TryUpdateNode("A", "B", 5);
+	pq1.TryUpdateNode("D", "A", 10);
+	pq1.TryUpdateNode("D", "A", 5);
+	pq1.TryUpdateNode("D", "A",10);
 
-	pq3.TryInsert("BB", 2);
-	pq3.TryInsert("AA", 1);
-	pq3.TryInsert("CC", 3);
-	pq3.TryInsert("AA", 3);
+	pq3.TryInsert("BB", "BB", 2);
+	pq3.TryInsert("AA", "AA", 1);
+	pq3.TryInsert("CC", "CC", 3);
+	pq3.TryInsert("AA", "AA", 3);
 
 	auto name = pq1.PopPriorityNode();
 	
