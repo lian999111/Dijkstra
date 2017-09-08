@@ -52,6 +52,9 @@ public:
 	//	vertices:		A vector of vertex names of type T
 	PriorityQueue(const std::vector<T>& vertices);
 
+	// Empty destructor
+	~PriorityQueue() {}
+
 	// Change the g-value of the given node name and sort the order accordingly, if
 	// the existing g-value is greater than the given one
 	// Inputs:
@@ -66,9 +69,14 @@ public:
 	//	The node name of type T of the node with the smallest g-value in the queue
 	T PopPriorityNode();
 
+	// Insert the given node with its given gValue, if the node is not yet contained
+	// Inputs:
+	//	node:			A node name
+	//	gValue:			The corresponding g-value to be updated
+	// Output:
+	//	Ture if insertion is successful
 	bool TryInsert(const T& node, int gValue);
 
-	~PriorityQueue() {}
 };
 
 template <class T>
@@ -134,6 +142,7 @@ template<class T>
 bool PriorityQueue<T>::TryInsert(const T& node, int gValue)
 {
 	// Use find_if() to find the pair whose node name is as given
+	// TODO: This will cause superfluous find_if() if this method is used after TryChangeGValue()
 	const auto ite = std::find_if(pri_queue_.begin(), pri_queue_.end(),
 		[&node](const std::pair<T, int>& element) { return element.first == node; });	// Delegation
 																				
