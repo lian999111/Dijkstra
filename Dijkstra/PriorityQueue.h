@@ -66,6 +66,8 @@ public:
 	//	The node name of type T of the node with the smallest g-value in the queue
 	T PopPriorityNode();
 
+	bool TryInsert(const T& node, int gValue);
+
 	~PriorityQueue() {}
 };
 
@@ -126,6 +128,31 @@ T PriorityQueue<T>::PopPriorityNode()
 
 	//  Return the first element in the pair which is the node name
 	return pri_node.first;
+}
+
+template<class T>
+bool PriorityQueue<T>::TryInsert(const T& node, int gValue)
+{
+	// Use find_if() to find the pair whose node name is as given
+	const auto ite = std::find_if(pri_queue_.begin(), pri_queue_.end(),
+		[&node](const std::pair<T, int>& element) { return element.first == node; });	// Delegation
+																				
+	if (ite != pri_queue_.end())
+	{
+		return false;
+	}
+
+	auto new_node = std::make_pair(node, gValue);
+	pri_queue_.push_back(new_node);
+
+	// Sort the priority queue by the g-value (the second of the node pair)
+	std::sort(pri_queue_.begin(), pri_queue_.end(),
+		[](const auto& elem1, const auto& elem2)	// Delegation
+	{
+		return elem1.second < elem2.second;
+	});
+
+	return true;
 }
 
 

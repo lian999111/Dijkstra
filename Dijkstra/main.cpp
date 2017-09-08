@@ -17,6 +17,11 @@ int main()
 	pq1.TryChangeGValue("D", 5);
 	pq1.TryChangeGValue("D", 10);
 
+	pq3.TryInsert("BB", 2);
+	pq3.TryInsert("AA", 1);
+	pq3.TryInsert("CC", 3);
+	pq3.TryInsert("AA", 3);
+
 	auto name = pq1.PopPriorityNode();
 	
 
