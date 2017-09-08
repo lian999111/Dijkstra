@@ -59,7 +59,7 @@ public:
 	//	gValue:			The corresponding g-value to be updated
 	// Output:
 	//	Ture if g-value is changed successfully
-	bool TryChangeGValue(T node, int gValue);
+	bool TryChangeGValue(const T& node, int gValue);
 
 	// Pops and returns the first priority node in the queue
 	// Output:
@@ -85,7 +85,7 @@ PriorityQueue<T>::PriorityQueue(const std::vector<T>& vertices)
 {}
 
 template<class T>
-bool PriorityQueue<T>::TryChangeGValue(T node, int gValue)
+bool PriorityQueue<T>::TryChangeGValue(const T& node, int gValue)
 {
 	// Use find_if() to find the pair whose node name is as given
 	auto ite = std::find_if(pri_queue_.begin(), pri_queue_.end(),
