@@ -100,6 +100,22 @@ public:
 		// If path not found, path is an empty vector
 		return path;
 	}
+
+	// Gives the cost to get from start to target.
+	// Calls FindPath() to check if such path exists
+	// Inputs:
+	//	target_vertex:		The target vertex to search
+	// Output:
+	//	The cost from start to target. If path doesn't exist, return -1
+	int CostTo(T target_vertex)
+	{
+		// Try to find the path using FindPath()
+		if (FindPath(target_vertex))
+			// If found, return the g-value stored in closed_
+			return closed_[target_vertex].second;
+		else
+			return -1;
+	}
 };
 
 
