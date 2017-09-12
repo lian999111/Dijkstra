@@ -45,12 +45,12 @@ public:
 	// Constructs with a graph object with vertex names of type T
 	// Inputs:
 	//	g:				A graph object with vertex names of type T
-	PriorityQueue(const Graph<T>& g);
+	explicit PriorityQueue(const Graph<T>& g);
 
 	// Constructs with a vector of vertices
 	// Inputs:
 	//	vertices:		A vector of vertex names of type T
-	PriorityQueue(const std::vector<T>& vertices);
+	explicit PriorityQueue(const std::vector<T>& vertices);
 
 	// Empty destructor
 	~PriorityQueue() {}

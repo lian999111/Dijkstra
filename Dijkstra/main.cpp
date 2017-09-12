@@ -35,5 +35,9 @@ int main()
 	PathFinder<int> pf_for_g1(g1, 0);
 	pf_for_g1.FindPath(49);
 
+	// This will cause an error 
+	// because of attempting to implicit convert vertices into a prioirty queue
+	// PriorityQueue<std::string> pqpq = vertices;
+
 	return 0;
 }
