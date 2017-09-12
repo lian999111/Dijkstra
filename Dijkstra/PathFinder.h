@@ -39,6 +39,8 @@ private:
 public:
 	// Default constructor.
 	// Initializes the closed list as empty
+	// Inputs:
+	//	start_vertex:		The vertex to begin searching
 	PathFinder(const Graph<T>& g, T start_vertex);
 
 	// Finds the shortest path from start to target.
