@@ -67,6 +67,39 @@ public:
 		// If path found, return true
 		return true;
 	}
+
+	// Gives the shortest path from start to target.
+	// Calls FindPath() to check if such path exists
+	// Inputs:
+	//	target_vertex:		The target vertex to search
+	// Output:
+	//	The vector of vertices of the path. Empty if path doesn't exist
+	std::vector<T> PathTo(T target_vertex)
+	{
+		std::vector<T> path;
+
+		// Try to find the path using FindPath()
+		if (FindPath(target_vertex))
+		{
+			T curr_vertex = target_vertex;
+
+			// Reconstruct the path list
+			do
+			{
+				path.push_back(curr_vertex);
+				curr_vertex = closed_[curr_vertex].first;
+			} while (curr_vertex != start_vertex_);
+			
+			// Add the start vertex
+			path.push_back(start_vertex_);
+
+			// Flip around the path
+			std::reverse(path.begin(), path.end());
+		}
+		
+		// If path not found, path is an empty vector
+		return path;
+	}
 };
 
 

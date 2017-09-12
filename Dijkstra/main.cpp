@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "Graph.h"
 #include "PriorityQueue.h"
 #include "PathFinder.h"
@@ -8,7 +9,7 @@ int main()
 {
 	std::vector<std::string> vertices{ "A", "B", "C", "D", "E" };
 	Graph<std::string> g(vertices, 0.7, 10);
-	Graph<int> g1(50, 1, 10);
+	Graph<int> g1(50, 0.01, 10);
 
 	PriorityQueue<std::string> pq1(vertices);
 	PriorityQueue<std::string> pq2(g);
@@ -34,6 +35,12 @@ int main()
 
 	PathFinder<int> pf_for_g1(g1, 0);
 	pf_for_g1.FindPath(49);
+	auto path = pf_for_g1.PathTo(2);
+
+	for (const auto& vertex : path)
+	{
+		std::cout << vertex << "->";
+	}
 
 	// This will cause an error 
 	// because of attempting to implicit convert vertices into a prioirty queue
