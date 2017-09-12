@@ -29,7 +29,7 @@ private:
 	// so we can continue searching after dropping it halfway if needed.
 	PriorityQueue<T> pq_;
 
-	// Uses Dijkstra's algorithm to find the shortest path from the start vertex
+	// Dijkstra's algorithm to find the shortest path from the start vertex.
 	// to the target vertex
 	// Inputs:
 	//	target_vertex:		The target vertex to search
@@ -41,8 +41,14 @@ public:
 	// Initializes the closed list as empty
 	PathFinder(const Graph<T>& g, T start_vertex);
 
-	// TODO: Return reconstructed path
-	void FindPath(T target_vertex)
+	// Finds the shortest path from start to target.
+	// If the specified target vertex has been closed, do nothing.
+	// If the specified target vertex hasn't been closed, do Dijkstra's algorithm.
+	// Inputs:
+	//	target_vertex:		The target vertex to search
+	// Output:
+	//	Ture if path can be found
+	bool FindPath(T target_vertex)
 	{
 		// Find the target vertex in the graph to check its existence
 		const auto ite_target = find(vertices_.begin(), vertices_.end(), target_vertex);
@@ -54,9 +60,10 @@ public:
 		const auto ite_target_in_closed = closed_.find(target_vertex);
 		if (ite_target_in_closed == closed_.end())
 			if (!Dijkstra(target_vertex))
-			{
-				// TODO: reconstruct the path
-			}
+				// If path cannot be found, return false
+				return false;
+		// If path found, return true
+		return true;
 	}
 };
 
