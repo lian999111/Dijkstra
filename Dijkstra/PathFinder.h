@@ -38,7 +38,7 @@ private:
 	bool Dijkstra(T target_vertex);
 public:
 	// Default constructor.
-	// Initializes closed as empty
+	// Initializes the closed list as empty
 	PathFinder(const Graph<T>& g, T start_vertex);
 
 	// TODO: Return reconstructed path
