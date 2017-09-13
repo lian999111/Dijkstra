@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include <cassert>
 #include "Graph.h"
 #include "PriorityQueue.h"
 

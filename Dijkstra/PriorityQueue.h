@@ -2,6 +2,7 @@
 #include <vector>
 #include <tuple>
 #include <algorithm>
+#include <cassert>
 #include "Graph.h"
 
 // Priority Queue with custom type T of node names
