@@ -66,10 +66,13 @@ public:
 	//	Ture if g-value is changed successfully
 	bool TryUpdateNode(const T& node, const T& parent, int gValue);
 
-	// Pops and returns the first priority node in the queue
+	// Gets the first priority node in the queue
 	// Output:
 	//	The tuple: (self name, parent name, g-value)
-	std::tuple<T, T, int> PopPriorityNode();
+	std::tuple<T, T, int> GetFirstPriorityNode();
+
+	// Pops the first priority node in the queue
+	void PopFirstPriorityNode();
 
 	// Insert the given node with its given gValue, if the node is not yet contained
 	// Inputs:
@@ -129,21 +132,24 @@ bool PriorityQueue<T>::TryUpdateNode(const T& node, const T& parent, int gValue)
 }
 
 template<class T>
-std::tuple<T, T, int> PriorityQueue<T>::PopPriorityNode()
+std::tuple<T, T, int> PriorityQueue<T>::GetFirstPriorityNode()
+{
+	//  Return the first element in the pair which is the node name
+	return pri_queue_.front();
+}
+
+template<class T>
+void PriorityQueue<T>::PopFirstPriorityNode()
 {
 	// Reverse the vector so we can put the needed node in the queue at the back then pop it
 	// The reason to sort the node from small to big is just to make it more reasonable
 	std::reverse(pri_queue_.begin(), pri_queue_.end());
 
-	// Get the node and pop it from the vector
-	std::tuple<T, T, int> pri_node = pri_queue_.back();
+	//Pop the first priority from the vector
 	pri_queue_.pop_back();
 
 	// Reverse the vector again
 	std::reverse(pri_queue_.begin(), pri_queue_.end());
-
-	//  Return the first element in the pair which is the node name
-	return pri_node;
 }
 
 template<class T>

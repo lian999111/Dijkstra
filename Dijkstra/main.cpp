@@ -64,6 +64,17 @@ int main()
 	g2.AddEdge("F", "H", 1);
 
 	PathFinder<std::string> pf_for_g2(g2, "A");
+	path = pf_for_g2.PathTo("D");
+	cost = pf_for_g2.CostTo("D");
+
+	sep = "";
+	for (const auto& item : path)
+	{
+		std::cout << sep << item;
+		sep = "->";
+	}
+	std::cout << std::endl;
+
 	path = pf_for_g2.PathTo("H");
 	cost = pf_for_g2.CostTo("H");
 
@@ -73,6 +84,9 @@ int main()
 		std::cout << sep << item;
 		sep = "->";
 	}
+
+
+	std::cout << std::endl;
 
 	pf_for_g2.SetStartVertex("H");
 		

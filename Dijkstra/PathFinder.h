@@ -92,8 +92,8 @@ bool PathFinder<T>::Dijkstra(const T& target_vertex) const
 	// Keep doing until the priority queue is empty
 	while (pq_.Size())
 	{
-		// Pop the next node from the priority queue and get the names and the g-value
-		auto curr_node = pq_.PopPriorityNode();
+		// Get the next node from the priority queue and get the names and the g-value
+		auto curr_node = pq_.GetFirstPriorityNode();
 		curr_name = std::get<0>(curr_node);
 		curr_parent_name = std::get<1>(curr_node);
 		curr_g_value = std::get<2>(curr_node);
@@ -105,6 +105,11 @@ bool PathFinder<T>::Dijkstra(const T& target_vertex) const
 		// If the current node is the desired one, return true and exit
 		if (curr_name == target_vertex)
 			return true;
+
+		// Dynamic Programing
+		// The first priority node won't be popped if target is reached before pq_ is empty
+		// The node will be left in pq_ for possible later search for other pathes.
+		pq_.PopFirstPriorityNode();
 
 		// If not found yet, get the neighbors of the current node
 		std::vector<T> neighbors = graph_.NeighborsOf(curr_name);
