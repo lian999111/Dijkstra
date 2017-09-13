@@ -51,23 +51,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	Ture if path can be found
-	bool FindPath(T target_vertex) const
-	{
-		// Find the target vertex in the graph to check its existence
-		const auto ite_target = find(vertices_.begin(), vertices_.end(), target_vertex);
-
-		// The target must exist
-		assert(ite_target != vertices_.end());
-
-		// If the target vertex is not closed, do Dijkstra's algorthim towards the target
-		const auto ite_target_in_closed = closed_.find(target_vertex);
-		if (ite_target_in_closed == closed_.end())
-			if (!Dijkstra(target_vertex))
-				// If path cannot be found, return false
-				return false;
-		// If path found, return true
-		return true;
-	}
+	bool FindPath(T target_vertex) const;	
 
 	// Gives the shortest path from start to target.
 	// Calls FindPath() to check if such path exists
@@ -75,32 +59,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	The vector of vertices of the path. Empty if path doesn't exist
-	std::vector<T> PathTo(T target_vertex) const
-	{
-		std::vector<T> path;
-
-		// Try to find the path using FindPath()
-		if (FindPath(target_vertex))
-		{
-			T curr_vertex = target_vertex;
-
-			// Reconstruct the path list
-			do
-			{
-				path.push_back(curr_vertex);
-				curr_vertex = closed_[curr_vertex].first;
-			} while (curr_vertex != start_vertex_);
-			
-			// Add the start vertex
-			path.push_back(start_vertex_);
-
-			// Flip around the path
-			std::reverse(path.begin(), path.end());
-		}
-		
-		// If path not found, path is an empty vector
-		return path;
-	}
+	std::vector<T> PathTo(T target_vertex) const;
 
 	// Gives the cost to get from start to target.
 	// Calls FindPath() to check if such path exists
@@ -108,15 +67,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	The cost from start to target. If path doesn't exist, return -1
-	int CostTo(T target_vertex) const
-	{
-		// Try to find the path using FindPath()
-		if (FindPath(target_vertex))
-			// If found, return the g-value stored in closed_
-			return closed_[target_vertex].second;
-		else
-			return -1;
-	}
+	int CostTo(T target_vertex) const;
 
 	// Sets the start vertex as given.
 	// If the start vertex is different from the current, reset closed_ and pq_ for later calculation.
@@ -124,26 +75,7 @@ public:
 	//	start_vertex:		The start vertex to search
 	// Output:
 	//	True if new start is different and set successfully
-	bool SetStartVertex(T start_vertex)
-	{
-		// Find the start vertex in the graph to check its existence
-		const auto ite_start = find(vertices_.begin(), vertices_.end(), start_vertex);
-
-		// The start must exist
-		assert(ite_start != vertices_.end());
-
-		// If the start vertex is different, reset closed_ and pq_
-		if (start_vertex_ != start_vertex)
-		{
-			closed_ = std::map<T, std::pair<T, int>>();
-			pq_ = PriorityQueue<T>();
-			pq_.TryInsert(start_vertex, start_vertex, 0);
-			start_vertex_ = start_vertex;
-			return true;
-		}
-
-		return false;
-	}
+	bool SetStartVertex(T start_vertex);
 };
 
 
@@ -207,4 +139,84 @@ PathFinder<T>::PathFinder(const Graph<T>& g, T start_vertex)
 {
 	// Add the start vertex to the priority queue when constructing
 	pq_.TryInsert(start_vertex_, start_vertex_, 0);
+}
+
+template<class T>
+bool PathFinder<T>::FindPath(T target_vertex) const
+{
+	// Find the target vertex in the graph to check its existence
+	const auto ite_target = find(vertices_.begin(), vertices_.end(), target_vertex);
+
+	// The target must exist
+	assert(ite_target != vertices_.end());
+
+	// If the target vertex is not closed, do Dijkstra's algorthim towards the target
+	const auto ite_target_in_closed = closed_.find(target_vertex);
+	if (ite_target_in_closed == closed_.end())
+		if (!Dijkstra(target_vertex))
+			// If path cannot be found, return false
+			return false;
+	// If path found, return true
+	return true;
+}
+
+template <class T>
+std::vector<T> PathFinder<T>::PathTo(T target_vertex) const
+{
+	std::vector<T> path;
+
+	// Try to find the path using FindPath()
+	if (FindPath(target_vertex))
+	{
+		T curr_vertex = target_vertex;
+
+		// Reconstruct the path list
+		do
+		{
+			path.push_back(curr_vertex);
+			curr_vertex = closed_[curr_vertex].first;
+		} while (curr_vertex != start_vertex_);
+
+		// Add the start vertex
+		path.push_back(start_vertex_);
+
+		// Flip around the path
+		std::reverse(path.begin(), path.end());
+	}
+
+	// If path not found, path is an empty vector
+	return path;
+}
+
+template <class T>
+int PathFinder<T>::CostTo(T target_vertex) const
+{
+	// Try to find the path using FindPath()
+	if (FindPath(target_vertex))
+		// If found, return the g-value stored in closed_
+		return closed_[target_vertex].second;
+	else
+		return -1;
+}
+
+template <class T>
+bool PathFinder<T>::SetStartVertex(T start_vertex)
+{
+	// Find the start vertex in the graph to check its existence
+	const auto ite_start = find(vertices_.begin(), vertices_.end(), start_vertex);
+
+	// The start must exist
+	assert(ite_start != vertices_.end());
+
+	// If the start vertex is different, reset closed_ and pq_
+	if (start_vertex_ != start_vertex)
+	{
+		closed_ = std::map<T, std::pair<T, int>>();
+		pq_ = PriorityQueue<T>();
+		pq_.TryInsert(start_vertex, start_vertex, 0);
+		start_vertex_ = start_vertex;
+		return true;
+	}
+
+	return false;
 }
