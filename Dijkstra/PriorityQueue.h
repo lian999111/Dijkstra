@@ -86,6 +86,9 @@ public:
 	// Returns the size of the priority queue
 	unsigned int Size();
 
+	// Returns true if the priority queue is empty
+	bool Empty();
+
 };
 
 template <class T>
@@ -182,6 +185,12 @@ template<class T>
 inline unsigned int PriorityQueue<T>::Size()
 {
 	return pri_queue_.size();
+}
+
+template<class T>
+inline bool PriorityQueue<T>::Empty()
+{
+	return pri_queue_.empty();
 }
 
 

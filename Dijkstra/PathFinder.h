@@ -90,7 +90,7 @@ bool PathFinder<T>::Dijkstra(const T& target_vertex) const
 	int curr_g_value{ 0 };
 
 	// Keep doing until the priority queue is empty
-	while (pq_.Size())
+	while (!pq_.Empty())
 	{
 		// Get the next node from the priority queue and get the names and the g-value
 		auto curr_node = pq_.GetFirstPriorityNode();
