@@ -22,12 +22,12 @@ private:
 	// The map storing the closed node:
 	// Key:		node name
 	// Value:	a pair containing the parent node and the g-value
-	std::map<T, std::pair<T, int>> closed_;
+	mutable std::map<T, std::pair<T, int>> closed_;
 
 	// The priority queue
 	// Make it a data member to keep the priority queue,
 	// so we can continue searching after dropping it halfway if needed.
-	PriorityQueue<T> pq_;
+	mutable PriorityQueue<T> pq_;
 
 	// Dijkstra's algorithm to find the shortest path from the start vertex.
 	// to the target vertex
@@ -35,7 +35,7 @@ private:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	Ture if path can be found
-	bool Dijkstra(T target_vertex);
+	bool Dijkstra(T target_vertex) const;
 public:
 	// Default constructor.
 	// Initializes the closed list as empty
@@ -50,7 +50,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	Ture if path can be found
-	bool FindPath(T target_vertex)
+	bool FindPath(T target_vertex) const
 	{
 		// Find the target vertex in the graph to check its existence
 		const auto ite_target = find(vertices_.begin(), vertices_.end(), target_vertex);
@@ -74,7 +74,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	The vector of vertices of the path. Empty if path doesn't exist
-	std::vector<T> PathTo(T target_vertex)
+	std::vector<T> PathTo(T target_vertex) const
 	{
 		std::vector<T> path;
 
@@ -107,7 +107,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	The cost from start to target. If path doesn't exist, return -1
-	int CostTo(T target_vertex)
+	int CostTo(T target_vertex) const
 	{
 		// Try to find the path using FindPath()
 		if (FindPath(target_vertex))
@@ -120,7 +120,7 @@ public:
 
 
 template<class T>
-bool PathFinder<T>::Dijkstra(T target_vertex)
+bool PathFinder<T>::Dijkstra(T target_vertex) const
 {
 	// Used to store the newly calculated cost (g-value)
 	int cost{ 0 };
