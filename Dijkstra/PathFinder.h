@@ -117,6 +117,33 @@ public:
 		else
 			return -1;
 	}
+
+	// Sets the start vertex as given.
+	// If the start vertex is different from the current, reset closed_ and pq_ for later calculation.
+	// Inputs:
+	//	start_vertex:		The start vertex to search
+	// Output:
+	//	True if new start is different and set successfully
+	bool SetStartVertex(T start_vertex)
+	{
+		// Find the start vertex in the graph to check its existence
+		const auto ite_start = find(vertices_.begin(), vertices_.end(), start_vertex);
+
+		// The start must exist
+		assert(ite_start != vertices_.end());
+
+		// If the start vertex is different, reset closed_ and pq_
+		if (start_vertex_ != start_vertex)
+		{
+			closed_ = std::map<T, std::pair<T, int>>();
+			pq_ = PriorityQueue<T>();
+			pq_.TryInsert(start_vertex, start_vertex, 0);
+			start_vertex_ = start_vertex;
+			return true;
+		}
+
+		return false;
+	}
 };
 
 
