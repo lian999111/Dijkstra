@@ -36,13 +36,13 @@ private:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	Ture if path can be found
-	bool Dijkstra(T target_vertex) const;
+	bool Dijkstra(const T& target_vertex) const;
 public:
 	// Default constructor.
 	// Initializes the closed list as empty
 	// Inputs:
 	//	start_vertex:		The vertex to begin searching
-	PathFinder(const Graph<T>& g, T start_vertex);
+	PathFinder(const Graph<T>& g, const T& start_vertex);
 
 	// Finds the shortest path from start to target.
 	// If the specified target vertex has been closed, do nothing.
@@ -51,7 +51,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	Ture if path can be found
-	bool FindPath(T target_vertex) const;	
+	bool FindPath(const T& target_vertex) const;	
 
 	// Gives the shortest path from start to target.
 	// Calls FindPath() to check if such path exists
@@ -59,7 +59,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	The vector of vertices of the path. Empty if path doesn't exist
-	std::vector<T> PathTo(T target_vertex) const;
+	std::vector<T> PathTo(const T& target_vertex) const;
 
 	// Gives the cost to get from start to target.
 	// Calls FindPath() to check if such path exists
@@ -67,7 +67,7 @@ public:
 	//	target_vertex:		The target vertex to search
 	// Output:
 	//	The cost from start to target. If path doesn't exist, return -1
-	int CostTo(T target_vertex) const;
+	int CostTo(const T& target_vertex) const;
 
 	// Sets the start vertex as given.
 	// If the start vertex is different from the current, reset closed_ and pq_ for later calculation.
@@ -75,12 +75,12 @@ public:
 	//	start_vertex:		The start vertex to search
 	// Output:
 	//	True if new start is different and set successfully
-	bool SetStartVertex(T start_vertex);
+	bool SetStartVertex(const T& start_vertex);
 };
 
 
 template<class T>
-bool PathFinder<T>::Dijkstra(T target_vertex) const
+bool PathFinder<T>::Dijkstra(const T& target_vertex) const
 {
 	// Used to store the newly calculated cost (g-value)
 	int cost{ 0 };
@@ -130,7 +130,7 @@ bool PathFinder<T>::Dijkstra(T target_vertex) const
 }
 
 template<class T>
-PathFinder<T>::PathFinder(const Graph<T>& g, T start_vertex)
+PathFinder<T>::PathFinder(const Graph<T>& g, const T& start_vertex)
 	: graph_(g)
 	, vertices_(g.GetVertices())
 	, start_vertex_(start_vertex)
@@ -142,7 +142,7 @@ PathFinder<T>::PathFinder(const Graph<T>& g, T start_vertex)
 }
 
 template<class T>
-bool PathFinder<T>::FindPath(T target_vertex) const
+bool PathFinder<T>::FindPath(const T& target_vertex) const
 {
 	// Find the target vertex in the graph to check its existence
 	const auto ite_target = find(vertices_.begin(), vertices_.end(), target_vertex);
@@ -161,7 +161,7 @@ bool PathFinder<T>::FindPath(T target_vertex) const
 }
 
 template <class T>
-std::vector<T> PathFinder<T>::PathTo(T target_vertex) const
+std::vector<T> PathFinder<T>::PathTo(const T& target_vertex) const
 {
 	std::vector<T> path;
 
@@ -189,7 +189,7 @@ std::vector<T> PathFinder<T>::PathTo(T target_vertex) const
 }
 
 template <class T>
-int PathFinder<T>::CostTo(T target_vertex) const
+int PathFinder<T>::CostTo(const T& target_vertex) const
 {
 	// Try to find the path using FindPath()
 	if (FindPath(target_vertex))
@@ -200,7 +200,7 @@ int PathFinder<T>::CostTo(T target_vertex) const
 }
 
 template <class T>
-bool PathFinder<T>::SetStartVertex(T start_vertex)
+bool PathFinder<T>::SetStartVertex(const T& start_vertex)
 {
 	// Find the start vertex in the graph to check its existence
 	const auto ite_start = find(vertices_.begin(), vertices_.end(), start_vertex);
