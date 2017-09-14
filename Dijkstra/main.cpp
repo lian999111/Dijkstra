@@ -97,7 +97,8 @@ int main()
 		int curr_cost{ 0 };
 		int counter{ 0 };
 
-		for (int i = 0; i < 1000; ++i)
+		// Run 100 times
+		for (int i = 0; i < 100; ++i)
 		{
 			int num_of_vertices{ 50 };
 			// The range of edge distance: 10
