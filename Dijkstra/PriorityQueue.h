@@ -1,3 +1,10 @@
+// This class template implements the priority queue of vertex name of type T.
+// Priority queue is used in Dijkstra's algorithm to expand the vertices systematically.
+
+// The priority queue contains ordered nodes picked out from the graph that are 
+// to be expanded. The elements in the queue is a tuple with the form:
+// (self name, parent name, g-value)
+
 #pragma once
 #include <vector>
 #include <tuple>

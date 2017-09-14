@@ -1,3 +1,7 @@
+// This class template implements a path finder using Dijkstra's algorithm 
+// It finds the shortest path in a graph with vertex name of type T given a 
+// start vertex and a target vertex.
+
 #pragma once
 #include <vector>
 #include <map>

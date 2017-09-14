@@ -1,3 +1,9 @@
+// 2 tests are conducted in main()
+//	1. Create a graph consisting of vertices (A to H) and find the shortest path from 
+//     "A to D" and "A to H".
+//	2. Monte Carlo simulation of average distances in graphs with different edge densities
+//	   and edges varying randomly.
+
 #include <string>
 #include <iostream>
 #include "Graph.h"
@@ -25,12 +31,16 @@ int main()
 	pq3.TryInsert("CC", "CC", 3);
 	pq3.TryInsert("AA", "AA", 3);
 
-	// This will cause an error 
-	// because of attempting to implicit convert vertices into a prioirty queue
+	// The following will cause an error 
+	// because implicitly converting vertices into a prioirty queue is not allowed
 	// PriorityQueue<std::string> pqpq = vertices;
 
-	Graph<std::string> g2(vertices);
 
+	/////////////////// Test 1 ///////////////////
+	// Create a graph g2 with given vertices (A to H)
+	Graph<std::string> g2(vertices);
+	
+	// Add edges with given distance (cost) 
 	g2.AddEdge("A", "B", 4);
 	g2.AddEdge("A", "C", 3);
 	g2.AddEdge("A", "D", 2);
@@ -43,10 +53,14 @@ int main()
 	g2.AddEdge("G", "H", 2);
 	g2.AddEdge("F", "H", 1);
 
+	// Create a path finder for g2 and set A as start vertex
 	PathFinder<std::string> pf_for_g2(g2, "A");
+
+	// Find the shortest path from A to D
 	auto path = pf_for_g2.PathTo("D");
 	int cost = pf_for_g2.CostTo("D");
 
+	// Print the result
 	std::string sep = "";
 	for (const auto& item : path)
 	{
@@ -55,22 +69,23 @@ int main()
 	}
 	std::cout << "\nThe cost from A to D: " << cost << std::endl;
 
+	// Find the shortest path from A to H
 	path = pf_for_g2.PathTo("H");
 	cost = pf_for_g2.CostTo("H");
 
+	// Print the result
 	sep = "";
 	for (const auto& item : path)
 	{
 		std::cout << sep << item;
 		sep = "->";
 	}
-
 	std::cout << "\nThe cost from A to F: " << cost << std::endl;
 
 	// Test setting a new start vertex
 	pf_for_g2.SetStartVertex("H");
 
-
+	/////////////////// Test 2 ///////////////////
 	// Test graphs with different edge densities
 	std::cout << std::endl;
 	std::vector<double> densities = { 0.1, 0.4, 0.8 };
