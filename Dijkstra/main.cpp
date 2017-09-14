@@ -93,27 +93,29 @@ int main()
 	std::cout << "50 vertices and edges ranging from 1 to 10 randomly:" << std::endl;
 	for (const auto& density : densities)
 	{
-		int num_of_vertices{ 50 };
-		// The range of edge distance: 10
-		Graph<int> graph(num_of_vertices, density, 10);
-		// Start vertex: 0
-		PathFinder<int> pf_graph(graph, 0);
-
 		int total_cost{ 0 };
 		int curr_cost{ 0 };
 		int counter{ 0 };
 
-		for (int i = 0; i < num_of_vertices; ++i)
+		for (int i = 0; i < 1000; ++i)
 		{
-			curr_cost = pf_graph.CostTo(i);
-			// Ignore the unreachable cases
-			if (curr_cost > 0)
+			int num_of_vertices{ 50 };
+			// The range of edge distance: 10
+			Graph<int> graph(num_of_vertices, density, 10);
+			// Start vertex: 0
+			PathFinder<int> pf_graph(graph, 0);
+
+			for (int i = 0; i < num_of_vertices; ++i)
 			{
-				counter++;
-				total_cost += curr_cost;
+				curr_cost = pf_graph.CostTo(i);
+				// Ignore the unreachable cases
+				if (curr_cost > 0)
+				{
+					counter++;
+					total_cost += curr_cost;
+				}
 			}
 		}
-
 		std::cout << "When the edge density is: " << density << std::endl;
 		std::cout << "The average distance from 0 to other reachable vertices is: " << static_cast<double>(total_cost) / counter << std::endl;
 		std::cout << std::endl;
