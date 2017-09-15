@@ -119,13 +119,13 @@ bool PathFinder<T>::Dijkstra(const T& target_vertex) const
 		std::vector<T> neighbors = graph_.NeighborsOf(curr_name);
 		
 		// Expand the neighbors
-		for (auto&& next_name : neighbors)
+		for (const auto& next_name : neighbors)
 		{
 			// Check if this neighbor is already closed
 			const auto ite = closed_.find(next_name);
 			if (ite != closed_.end())
 				continue;
-
+			
 			// If not closed, calculate the its cost from the current node
 			cost = curr_g_value + graph_.GetEdgeValue(curr_name, next_name);
 
