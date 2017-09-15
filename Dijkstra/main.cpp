@@ -93,6 +93,8 @@ int main()
 	std::cout << "50 vertices and edges ranging from 1 to 10 randomly:" << std::endl;
 	for (const auto& density : densities)
 	{
+		std::cout << "Edge density: " << density << std::endl;
+
 		int total_cost{ 0 };
 		int curr_cost{ 0 };
 		int counter{ 0 };
@@ -117,8 +119,8 @@ int main()
 				}
 			}
 		}
-		std::cout << "When the edge density is: " << density << std::endl;
-		std::cout << "The average distance from 0 to other reachable vertices is: " << static_cast<double>(total_cost) / counter << std::endl;
+		std::cout << "After 100 Monte Carlo runs," << std::endl;
+		std::cout << "the average distance from 0 to other reachable vertices is: " << static_cast<double>(total_cost) / counter << std::endl;
 		std::cout << std::endl;
 	}
 	
