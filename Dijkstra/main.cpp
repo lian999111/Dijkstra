@@ -80,7 +80,7 @@ int main()
 		std::cout << sep << item;
 		sep = "->";
 	}
-	std::cout << "\nThe cost from A to F: " << cost << std::endl;
+	std::cout << "\nThe cost from A to H: " << cost << std::endl;
 
 	// Test setting a new start vertex
 	pf_for_g2.SetStartVertex("H");
